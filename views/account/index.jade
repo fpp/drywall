@@ -3,6 +3,120 @@ extends ../../layouts/account
 block head
   title Account Area
 
+block feet
+  script(src='/views/account/index.js')
+
 block body
-  h1 My Account
-  p Where things get done.
+  div.page-header
+    h1 My Account
+  
+  .row
+    .span6
+      if (isActive == 'no')
+        #accountdata
+      else
+        #identity.form-horizontal
+        #password.form-horizontal
+      script(type='text/template', id='tmpl-accountdata')
+        form.form-horizontal
+          div.alerts
+            |<% _.each(errors, function(err) { %>
+            div.alert.alert-error
+              |<%= err %>
+            |<% }); %>
+            |<% if (dataUpdated) { %>
+            div.alert.alert-info
+              | Your account data was successfully updated.
+            |<% } %>
+            |<% if (isActive == 'no') { %>
+            div.alert.alert-info
+              | Please complete your setup by providing a username and password.
+            |<% } %>
+          div.control-group(class!='<%= errfor.username ? "error" : "" %>')
+            label.control-label Username:
+            div.controls
+              input(type='text', name='username', value!='<%= username %>')
+              span.help-inline <%= errfor.username %>
+          div.control-group(class!='<%= errfor.email ? "error" : "" %>')
+            label.control-label Email:
+            div.controls
+              input(type='text', name='email', value!='<%= email %>')
+              span.help-inline <%= errfor.email %>
+          div.control-group(class!='<%= errfor.password ? "error" : "" %>')
+            label.control-label Password:
+            div.controls
+              input(type='password', name='password', value!='<%= password %>')
+              span.help-inline <%= errfor.password %>
+          div.control-group(class!='<%= errfor.confirm ? "error" : "" %>')
+            label.control-label Re-enter Password:
+            div.controls
+              input(type='password', name='confirm', value!='<%= confirm %>')
+              span.help-inline <%= errfor.confirm %>
+          if (twitter)
+            p Twitter-User: #{twitter.screen_name}
+            p Twitter-Data: #{JSON.stringify(twitter)}
+          
+          if (github)
+            p Github-User: #{github.login}
+            p Github-Data: #{JSON.stringify(github)}
+
+         
+          div.form-actions
+            button.btn.btn-primary.btn-accountdata(type='button') Update My Account
+
+      script(type='text/template', id='data-record') !{data.record}
+  
+  script(type='text/template', id='tmpl-identity')
+    legend Identity
+    div.alerts
+      |<% _.each(errors, function(err) { %>
+      div.alert.alert-error
+        |<%= err %>
+      |<% }); %>
+      |<% if (success) { %>
+      div.alert.alert-info
+        | Changes have been saved.
+      |<% } %>
+    div.control-group(class!='<%= errfor.isActive ? "error" : "" %>')
+      label.control-label Is Active:
+      div.controls
+        select(name='isActive')
+          option(value='yes') yes
+          option(value='no') no
+        span.help-inline <%= errfor.isActive %>
+    div.control-group(class!='<%= errfor.username ? "error" : "" %>')
+      label.control-label Username:
+      div.controls
+        input(type='text', name='username', value!='<%= username %>')
+        span.help-inline <%= errfor.username %>
+    div.control-group(class!='<%= errfor.email ? "error" : "" %>')
+      label.control-label Email:
+      div.controls
+        input(type='text', name='email', value!='<%= email %>')
+        span.help-inline <%= errfor.email %>
+    div.form-actions
+      button.btn.btn-primary.btn-update(type='button') Update
+
+  script(type='text/template', id='tmpl-password')
+    legend Set Password
+    div.alerts
+      |<% _.each(errors, function(err) { %>
+      div.alert.alert-error
+        |<%= err %>
+      |<% }); %>
+    |<% if (success) { %>
+    div.alert.alert-info
+      | A new password has been set.
+    |<% } %>
+    div.control-group(class!='<%= errfor.newPassword ? "error" : "" %>')
+      label.control-label New Password:
+      div.controls
+        input(type='password', name='newPassword', value!='<%= newPassword %>')
+        span.help-inline <%= errfor.newPassword %>
+    div.control-group(class!='<%= errfor.confirm ? "error" : "" %>')
+      label.control-label Confirm Password:
+      div.controls
+        input(type='password', name='confirm', value!='<%= confirm %>')
+        span.help-inline <%= errfor.confirm %>
+    div.form-actions
+      button.btn.btn-primary.btn-password(type='button') Set Password

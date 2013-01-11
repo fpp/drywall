@@ -9,8 +9,14 @@ block feet
 block body
   div.page-header
     h1 Please Login
-  #login
-  
+  .row
+    .span5
+      #login
+  .row
+    .span5
+      a.btn.btn-large.btn-block(href="/auth/twitter") <i class="icon-twitter icon-large"></i> Sign in with Twitter
+      a.btn.btn-large.btn-block(href="/auth/github") <i class="icon-github icon-large"></i> Sign in with GitHub
+       
   script(type='text/template', id='tmpl-login')
     form.form-horizontal
       div.alerts

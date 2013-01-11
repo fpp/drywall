@@ -1,3 +1,5 @@
+var passport = require('passport');
+
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) return next();
   res.set('X-Auth-Required', 'true');
@@ -32,6 +34,45 @@ exports = module.exports = function(app) {
   app.get('/login/reset/:token/', require('./views/login/reset/index').init);
   app.put('/login/reset/:token/', require('./views/login/reset/index').set);
   app.get('/logout/', require('./views/logout/index').init);
+  
+  
+  //3rd party authentications
+  app.get('/auth/twitter', passport.authenticate('twitter', { failureRedirect: '/login' }), function(req, res){
+    // The request will be redirected to Twitter for authentication, so this
+    // function will not be called.
+    console.log('twitter auth: - strange call in authentication');
+  });
+  app.get('/auth/twitter/callback', passport.authenticate('twitter', { failureRedirect: '/login' }), function(req, res) {
+    console.log('the user is active: ' + req.user.isActive );
+    console.log('request authenticated: ' + req.isAuthenticated());
+    if(req.user.isActive == 'yes'){
+       res.redirect(req.user.defaultReturnUrl());
+    }
+    else {
+        res.redirect('/account/');    
+    }    
+  });
+
+  app.get('/auth/github', passport.authenticate('github', { failureRedirect: '/login' }), function(req, res){
+    // The request will be redirected to Twitter for authentication, so this
+    // function will not be called.
+    console.log('github auth: - strange call in authentication');
+  });
+  app.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), function(req, res) {
+    console.log('the user is active: ' + req.user.isActive );
+    console.log('request authenticated: ' + req.isAuthenticated());
+    if(req.user.isActive == 'yes'){
+       res.redirect(req.user.defaultReturnUrl());
+    }
+    else {
+        res.redirect('/account/');    
+    }    
+  });
+  
+  
+  
+  
+  
   
   //admin
   app.all('/admin*', ensureAuthenticated);
@@ -84,6 +125,9 @@ exports = module.exports = function(app) {
   
   //account
   app.all('/account*', ensureAuthenticated);
-  app.all('/account*', ensureAccount);
+  app.put('/account/*', ensureAccount);
   app.get('/account/', require('./views/account/index').init);
+  app.post('/account/', require('./views/account/index').updateaccount);
+  app.put('/account/identity/', require('./views/account/index').update);
+  app.put('/account/password/', require('./views/account/index').password);
 }

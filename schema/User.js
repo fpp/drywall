@@ -9,7 +9,10 @@ exports = module.exports = function(app, mongoose) {
     },
     isActive: String,
     timeCreated: { type: Date, default: Date.now },
-    resetPasswordToken: String
+    resetPasswordToken: String,
+    twitter: {},
+    github: {},
+    google: {}
   });
   userSchema.methods.canPlayRoleOf = function(role) {
     if (role == "admin" && this.roles.admin) return true;

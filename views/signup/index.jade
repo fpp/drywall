@@ -9,8 +9,14 @@ block feet
 block body
   div.page-header
     h1 Sign Up
-  #signup
-  
+  .row
+    .span5
+      #signup
+  .row
+    .span5
+      a.btn.btn-large.btn-block(href="/auth/twitter") <i class="icon-twitter icon-large"></i> Connect with Twitter
+      a.btn.btn-large.btn-block(href="/auth/github") <i class="icon-github icon-large"></i> Connect with GitHub
+      
   script(type='text/template', id='tmpl-signup')
     form.form-horizontal
       div.alerts

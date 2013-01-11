@@ -1,5 +1,6 @@
 @import url(../../vendor/bootstrap/css/bootstrap.min.css);
 @import url(../../vendor/bootstrap/css/bootstrap-responsive.min.css);
+@import url(../../vendor/font-awesome/css/font-awesome.min.css);
 @import url(./utility.css);
 
 /* compensate for navbar */

@@ -1,6 +1,6 @@
 {
   "name": "Drywall.js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "start": "node app"
@@ -13,6 +13,8 @@
     "mongoose": "~3.5.3",
     "emailjs": "~0.3.4",
     "passport": "~0.1.15",
-    "passport-local": "~0.1.6"
+    "passport-local": "~0.1.6",
+    "passport-twitter": ">=0.1.x",
+    "passport-github": ">=0.1.x"    
   }
 }
