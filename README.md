@@ -1,39 +1,17 @@
-```
-    ____                            ____    _     
-   / __ \_______  ___      ______ _/ / /   (_)____
-  / / / / ___/ / / / | /| / / __ `/ / /   / / ___/
- / /_/ / /  / /_/ /| |/ |/ / /_/ / / /   / (__  ) 
-/_____/_/   \__, / |__/|__/\__,_/_/_(_)_/ /____/  
-           /____/                    /___/        
-```
 
-Drywall.js
-=============
-
-A website and user system for Node.js. It's not the platform, not the framework and not a module.
-
-What you create with Drywall is more important than Drywall.
-
-Technologies Used
+This is a fork of Drywall
 ------------
 
-Server = [node.js, express, jade, passport, mongoose, emailjs, async]
+(for info on the original project see the Drywall project page: http://jedireza.github.com/drywall/ )
 
-Client = [bootstrap, backbone.js, jquery]
+This fork adds 3rd party authentication (twitter, github) for signup and login.
+Also includes account / settings editing by user
 
-Test Drive
-------------
+TODO:
+- format / enhance display of 3rd party jason on account page
+- allow association of new 3rd party id with existing account
+- allow removal of 3rd party id from existing account
 
-https://drywall.herokuapp.com/
- * username: root
- * password: h3r00t
-
-Note: The app on Heroku has been modified so you cannot change the root user, the root users's linked administrator role or the root admin group. This was done in order to keep the app ready to test at all times.
-
-Screen Shots & Video
-------------
-
-See the project page: http://jedireza.github.com/drywall/
 
 Installation
 ------------
@@ -41,7 +19,10 @@ Installation
  1. Download and unzip (or git clone) into a directory.
  2. Run "$ npm install"
  3. Configure /app.js with mongodb and email credentials.
- 4. Run app via "$ node app"
+ 4. Configure config_example.json with 3rd party IDs / tokens and save as config.json
+ 5. Run app via "$ node app"
+
+Note: To use the application with 3rd party authentication services locally access the app via 127.0.0.1:3000 (vs. localhost:3000). Otherwise the authentication callbacks will not work.
 
 Setup
 ------------
@@ -70,52 +51,3 @@ Now just use the reset password feature to set a password.
  * Set a new password.
 
 Login. Customize. Enjoy.
-
-Philosophy
-------------
-
- * Create a website and user system.
- * Write code in a simple and consistant way.
- * No home-grown modules or libraries.
- * Only create minor utilities or plugins to avoid repetitiveness.
- * Find and use good tools; frameworks, modules and libraries.
- * Use tools in their native/default behavior.
-
-Features
-------------
-
- * Basic front end web pages.
- * Contact page has form to email.
- * Login system with forgot password and reset password.
- * User system with seperate account and admin roles.
- * Admin groups with shared permission settings.
- * Administrator level permissions which override group permissions.
- * Global admin quick search component.
-
-License
-------------
-
-(The MIT License)
-
-Copyright (c) 2012 Reza Akhavan <reza@akhavan.me>
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-'Software'), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/d41f60f22a2148e2e2dc6b705cd01481 "githalytics.com")](http://githalytics.com/jedireza/drywall)
