@@ -1,0 +1,14 @@
+{
+  "auth": {
+    "twitter": {
+      "consumerkey" : "CONSUMER_KEY",
+      "consumersecret" : "CONSUMER_SECRET",
+      "callback" : "http://127.0.0.1:3000/auth/twitter/callback"
+    },
+    "github": {
+      "consumerkey" : "APP_ID",
+      "consumersecret" : "APP_SECRET",
+      "callback" : "http://127.0.0.1:3000/auth/github/callback"
+    }
+  }
+}
