@@ -46,7 +46,6 @@ app.configure(function(){
     host: 'mail.email.addy',
     ssl: true
   });
-
     
   //middleware
   app.use(express.favicon(__dirname + '/public/favicon.ico'));

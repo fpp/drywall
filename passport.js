@@ -45,10 +45,12 @@ exports = module.exports = function(app, passport) {
         passport.use(new passportGitHubStrategy({
             clientID: config.auth.github.consumerkey,
             clientSecret: config.auth.github.consumersecret,
-            callbackURL: config.auth.github.callback
+            callbackURL: config.auth.github.callback,
+            passReqToCallback: true
         },
 
-        function(token, refreshToken, profile, done) {
+        function(req, token, refreshToken, profile, done) {
+         if (!req.user) {  
             app.db.models.User.findOne({
                 'github.id': profile.id
             }, function(err, user) {
@@ -109,6 +111,35 @@ exports = module.exports = function(app, passport) {
                     return done(err, user);
                 }
             });
+         }//!req.user
+        else { // is authenticated user we add 3rd party to the user profile
+            
+        app.db.models.User.findOne({
+            _id: req.user._id
+        }, function(err, user) {
+            if (err) {
+                return done(err)
+            }
+            if (!user) {
+                console.log('passport deserialize: - user not found');
+                return done(err, req.user);
+            }
+            else {
+                //TODO: check if profile.id already in db
+                user.github = profile._json;
+                user.save(function(err, user) {
+                    if (err) {
+                        return done(err);
+                        }
+                    return done(err, user);
+                });
+            }
+            
+        });
+      
+      return done(null, req.user);  
+            
+        }// else - is authenticated user we add 3rd party to the user profile
         }));
     }
 
@@ -117,10 +148,13 @@ exports = module.exports = function(app, passport) {
         passport.use(new passportTwitterStrategy({
             consumerKey: config.auth.twitter.consumerkey,
             consumerSecret: config.auth.twitter.consumersecret,
-            callbackURL: config.auth.twitter.callback
+            callbackURL: config.auth.twitter.callback,
+            passReqToCallback: true
         },
 
-        function(token, tokenSecret, profile, done) {
+        function(req, token, tokenSecret, profile, done) {
+
+        if (!req.user) {
             app.db.models.User.findOne({
                 'twitter.id': profile.id
             }, function(err, user) {
@@ -179,8 +213,41 @@ exports = module.exports = function(app, passport) {
                     return done(err, user);
                 }
             });
+        }//!req.user
+        else {
+            
+     // console.log('twitter strategy (account): ' + JSON.stringify(req.user));
+     // console.log('twitter strategy (account): ' + JSON.stringify(profile));
+              app.db.models.User.findOne({
+            _id: req.user._id
+        }, function(err, user) {
+            if (err) {
+                return done(err)
+            }
+            if (!user) {
+                console.log('passport deserialize: - user not found');
+                return done(err, req.user);
+            }
+            else {
+                //TODO: check if profile.id already in db
+                user.twitter = profile._json;
+                user.save(function(err, user) {
+                    if (err) {
+                        return done(err);
+                        }
+                    return done(err, user);
+                });
+            }
+            
+        });
+      
+      return done(null, req.user);
+
+        }
         }));
     }
+
+//--------------------------------------------------------------
 
     passport.serializeUser(function(user, done) {
         done(null, user._id);

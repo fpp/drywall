@@ -16,7 +16,10 @@ block body
         #accountdata
       else
         #identity.form-horizontal
+        #3rdparty-table
         #password.form-horizontal
+
+
       script(type='text/template', id='tmpl-accountdata')
         form.form-horizontal
           div.alerts
@@ -30,7 +33,7 @@ block body
             |<% } %>
             |<% if (isActive == 'no') { %>
             div.alert.alert-info
-              | Please complete your setup by providing a username and password.
+              | Please complete your setup by providing a username, email and password.
             |<% } %>
           div.control-group(class!='<%= errfor.username ? "error" : "" %>')
             label.control-label Username:
@@ -52,20 +55,59 @@ block body
             div.controls
               input(type='password', name='confirm', value!='<%= confirm %>')
               span.help-inline <%= errfor.confirm %>
-          if (twitter)
-            p Twitter-User: #{twitter.screen_name}
-            p Twitter-Data: #{JSON.stringify(twitter)}
-          
-          if (github)
-            p Github-User: #{github.login}
-            p Github-Data: #{JSON.stringify(github)}
-
-         
+          div.accordion#accordion2
+            if (github)
+              div.control-group
+                label.control-label <i class="icon-github icon-large"></i> Github:
+                div.controls
+                  input(type='text', name='ghID', disabled, value!='User-ID: <%= github.login %>')
+              div.accordion-group
+                div.accordion-heading
+                  a.accordion-toggle(href="#collapseOne", data-parent="#accordion2", data-toggle="collapse") Show profile
+                div.accordion-body.collapse#collapseOne
+                  div.accordion-inner
+                    p 
+                      | Github-Profile: 
+                      <br />
+                      | <%= github.data %>
+            if (twitter)
+              div.control-group
+                label.control-label <i class="icon-twitter icon-large"></i> Twitter: 
+                div.controls
+                  input(type='text', name='twID', disabled, value!='User-ID: <%= twitter.screen_name %>')
+              div.accordion-group
+                div.accordion-heading
+                  a.accordion-toggle(href="#collapseTwo", data-parent="#accordion2", data-toggle="collapse") Show profile
+                div.accordion-body.collapse#collapseTwo
+                  div.accordion-inner
+                    p 
+                      | Twitter-Profile:
+                      <br />
+                      | <%= twitter.data %>
           div.form-actions
             button.btn.btn-primary.btn-accountdata(type='button') Update My Account
 
       script(type='text/template', id='data-record') !{data.record}
   
+  script(type='text/template', id='tmpl-3rdparty-table')
+    legend 3rd party authentication
+    table.table.table-striped
+      thead
+        tr
+          th Service 
+          th 
+          th User-ID
+          th 
+      tbody#3rdparty-rows
+  
+  script(type='text/template', id='tmpl-3rdparty-row')
+    td.span1
+      input.btn.btn-warning.btn-remove.custom(type='button', value='Remove link')
+    td.span2 <i class="icon-github icon-large"></i> <%= provider %>
+    td.span2 <%= username %>
+    td.span2#prof-link <a href="#3rdparty-table">Show Profile</a>
+
+
   script(type='text/template', id='tmpl-identity')
     legend Identity
     div.alerts

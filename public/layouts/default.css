@@ -17,6 +17,11 @@ body {
   }
 }
 
+/* fixed width buttons */
+.custom {
+    width: 150px !important;
+}
+
 /* tables */
 table.table thead th {
   background-color: #ddd;

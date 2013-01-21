@@ -7,9 +7,9 @@ This fork adds 3rd party authentication (twitter, github) for signup and login.
 Also includes account / settings editing by user
 
 TODO:
-- format / enhance display of 3rd party json on account page
-- allow association of new 3rd party id with existing account
-- allow removal of 3rd party id from existing account
+- ~~format / enhance display of 3rd party json on account page~~
+- ~~allow association of new 3rd party id with existing account~~
+- ~~allow removal of 3rd party id from existing account~~
 - remove console.logs and clean-up some rough edges in the code 
 
 

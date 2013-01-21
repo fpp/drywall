@@ -37,12 +37,12 @@ exports = module.exports = function(app) {
   
   
   //3rd party authentications
-  app.get('/auth/twitter', passport.authenticate('twitter', { failureRedirect: '/login' }), function(req, res){
+  app.get('/auth/twitter', passport.authenticate('twitter', { failureRedirect: '/login/' }), function(req, res){
     // The request will be redirected to Twitter for authentication, so this
     // function will not be called.
     console.log('twitter auth: - strange call in authentication');
   });
-  app.get('/auth/twitter/callback', passport.authenticate('twitter', { failureRedirect: '/login' }), function(req, res) {
+  app.get('/auth/twitter/callback', passport.authenticate('twitter', { failureRedirect: '/login/' }), function(req, res) {
     console.log('the user is active: ' + req.user.isActive );
     console.log('request authenticated: ' + req.isAuthenticated());
     if(req.user.isActive == 'yes'){
@@ -53,12 +53,12 @@ exports = module.exports = function(app) {
     }    
   });
 
-  app.get('/auth/github', passport.authenticate('github', { failureRedirect: '/login' }), function(req, res){
+  app.get('/auth/github', passport.authenticate('github', { failureRedirect: '/login/' }), function(req, res){
     // The request will be redirected to Twitter for authentication, so this
     // function will not be called.
     console.log('github auth: - strange call in authentication');
   });
-  app.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), function(req, res) {
+  app.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/login/' }), function(req, res) {
     console.log('the user is active: ' + req.user.isActive );
     console.log('request authenticated: ' + req.isAuthenticated());
     if(req.user.isActive == 'yes'){
@@ -68,10 +68,6 @@ exports = module.exports = function(app) {
         res.redirect('/account/');    
     }    
   });
-  
-  
-  
-  
   
   
   //admin
@@ -130,4 +126,7 @@ exports = module.exports = function(app) {
   app.post('/account/', require('./views/account/index').updateaccount);
   app.put('/account/identity/', require('./views/account/index').update);
   app.put('/account/password/', require('./views/account/index').password);
+  app.get('/account/3rdparty/', require('./views/account/index').init);
+  app.post('/account/3rdparty/remove/:provider/:id/', require('./views/account/index').unlinkProvider);
+  
 }

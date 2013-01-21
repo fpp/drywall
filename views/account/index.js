@@ -24,10 +24,16 @@ exports.init = function(req, res){
             }
 
             if (req.header('x-requested-with') == 'XMLHttpRequest') {
-                res.send(user);
+                console.log('the user for bb-fetch: ' + JSON.stringify(user));
+                //res.send(user);
+                res.send({
+                    data: {
+                        record: JSON.stringify(user)
+                    }
+                });
             }
             else {
-                console.log('the user for update: ' + JSON.stringify(user));
+                console.log('the user for render: ' + JSON.stringify(user));
                 //TODO: send user without the pwd hashes
                 res.render('account/index', {
                     data: {
@@ -43,6 +49,7 @@ exports.init = function(req, res){
         res.redirect('/login');
     }
 };
+
 
 exports.updateaccount = function(req, res){
   //create a workflow event emitter
@@ -62,7 +69,7 @@ exports.updateaccount = function(req, res){
       workflow.outcome.errfor.email = 'provided email not in recognized format';
     }
     if (!req.body.password) workflow.outcome.errfor.password = 'password is required';
-    if (!req.body.confirm) workflow.outcome.errfor.confirm = 'please confirm your password';
+    if (!req.body.confirm) workflow.outcome.errfor.confirm = 'confirm your password';
     if (req.body.password != req.body.confirm) {
       workflow.outcome.errors.push('Passwords do not match.');
     }
@@ -161,7 +168,7 @@ exports.updateaccount = function(req, res){
         projectName: req.app.get('project-name')
       },
       success: function(message) {
-        //res.redirect("/");
+        
         workflow.emit('logUserIn');
       },
       error: function(err) {
@@ -184,12 +191,13 @@ exports.updateaccount = function(req, res){
       else {
         req.login(user, function(err) {
           if (err) return workflow.emit('exception', err);
-          //workflow.outcome.defaultReturnUrl = "/";
-          workflow.outcome.defaultReturnUrl = user.defaultReturnUrl();
           
-          //res.redirect(workflow.outcome.defaultReturnUrl);
+          workflow.outcome.defaultReturnUrl = user.defaultReturnUrl();
+          workflow.outcome.user = user;
+          workflow.outcome.record = user;
+          
           workflow.emit('response');
-          //workflow.emit('sendCompletedSetupEmail');
+          
         });
       }
     })(req, res);
@@ -214,6 +222,7 @@ exports.update = function(req, res, next){
     else if (!/^[a-zA-Z0-9\-\_]+$/.test(req.body.username)) {
       workflow.outcome.errfor.username = 'only use letters, numbers, \'-\', \'_\'';
     }
+
     if (!req.body.email) {
       workflow.outcome.errfor.email = 'required';
     }
@@ -308,3 +317,42 @@ exports.password = function(req, res, next){
   //start the workflow
   workflow.emit('validate');
 };
+
+exports.unlinkProvider = function(req, res, next){
+  //create a workflow event emitter
+  var workflow = new req.app.utility.Workflow(req, res);
+  
+ 
+  workflow.on('patchUser', function() {
+    res.app.db.models.User.findOne({ _id: req.params.id }).exec(function(err, user) {
+      if (err) return workflow.emit('exception', err);
+      
+      if (!user) {
+        workflow.outcome.errors.push('User was not found.');
+        return workflow.emit('response');
+      }
+      console.log("User-ID: " + req.params.id);
+      console.log("Provider: " + req.params.provider);
+      console.log("User: " + JSON.stringify(user[req.params.provider]));
+      if(req.params.provider =="twitter"){
+        user.twitter = undefined;  
+      }
+      else if(req.params.provider =="github"){
+        user.github = undefined;  
+      }
+        else {
+            // unrecognized authentication provider
+        }
+      user.save(function(err, user) {
+        if (err) return workflow.emit('exception', err);
+        workflow.outcome.user = JSON.stringify(user)
+        
+        workflow.emit('response');
+      });
+    });
+  });
+
+  //start the workflow
+  workflow.emit('patchUser');
+};
+
