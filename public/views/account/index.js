@@ -204,7 +204,6 @@ function format3rdPartyModel(modeldata){
           if (response.success) {
                 var newData = format3rdPartyModel(response.user);
                 app.thirdpartyView.collection.reset(newData.data);
-                //console.log("New Data: " + JSON.stringify(newData.data));
           }
 
         }

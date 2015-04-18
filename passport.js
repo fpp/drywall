@@ -216,8 +216,6 @@ exports = module.exports = function(app, passport) {
         }//!req.user
         else {
             
-     // console.log('twitter strategy (account): ' + JSON.stringify(req.user));
-     // console.log('twitter strategy (account): ' + JSON.stringify(profile));
               app.db.models.User.findOne({
             _id: req.user._id
         }, function(err, user) {
@@ -294,7 +292,6 @@ exports = module.exports = function(app, passport) {
                         }
                         else {
                             done(err, user);
-                            //done(null, id);
                         }
                     });
 
